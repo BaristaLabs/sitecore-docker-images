@@ -58,7 +58,7 @@ function Invoke-Build
         [switch]$SkipHashValidation
         ,
         [Parameter(Mandatory = $false)]
-        [switch]$isolationMode = "hyperv"
+        [string]$isolationMode = "hyperv"
     )
 
     # Setup
