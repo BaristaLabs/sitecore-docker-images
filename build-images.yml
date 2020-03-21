@@ -8,7 +8,7 @@
 # - build.pruneImages
 # - build.sitecoreVersion
 # - build.sitecoreTopology
-# - build.sitecoreWindowsVersion
+# - build.windowsOSVersion
 # - build.includeSpe
 # - build.includeSxa
 # - build.includeJss
@@ -84,7 +84,7 @@ stages:
                 RegistryPassword = "$(container.registry.password)"
                 SitecoreVersion = "$(build.sitecoreVersion)"
                 Topology = $(build.sitecoreTopology)
-                OSVersion = "$(build.WindowsOSVersion)"
+                OSVersion = "$(build.windowsOSVersion)"
                 IncludeSpe = [System.Convert]::ToBoolean($(build.includeSpe))
                 IncludeSxa = [System.Convert]::ToBoolean($(build.includeSxa))
                 IncludeJss = [System.Convert]::ToBoolean($(build.includeJss))
