@@ -75,6 +75,7 @@ stages:
             clean: true
           - powershell: |
               "$(container.registry.password)" | docker login -u "$(container.registry.username)" --password-stdin $(container.registry.fullname)
+              dism /Online /Enable-Feature=Containers
               $buildProps = @{
                 InstallSourcePath = "$(windows.install.source.path)"
                 SitecoreUsername = "$(sitecore.username)"
