@@ -14,9 +14,9 @@ schedules:
 
 variables:
   # Variables associated with being able to store assets in an Azure Storage Account File Share
-  assets.useDrive: 'false' # true or false - if true the network drive will be mapped to Z: on windows and linux.install.source.path on linux
-  assets.shared.folder.server: '' # indicates the primary file service endpoint e.g myassets.file.core.windows.net. Expects the file share to be /docker-assets
-  asset.azure.fileshare.password: '' # indicates the password (key) that will be used to connect to the server.
+  assets.useDrive: 'true' # true or false - if true the network drive will be mapped to Z: on windows and linux.install.source.path on linux
+  #assets.shared.folder.server: '' # indicates the primary file service endpoint e.g myassets.file.core.windows.net. Expects the file share to be /docker-assets
+  #asset.azure.fileshare.password: '' # indicates the password (key) that will be used to connect to the server.
 
   # Variables associated with specifying what's built
   build.pruneImages: 'false' # Useful on hosted build agents
@@ -31,11 +31,11 @@ variables:
   build.skipExistingImages: '$true'
 
   # Variables associated with the container registry to use
-  container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io
-  container.registry.username: '' # Username to connect to the container registry
-  container.registry.password: '' # password to connect to the container registry
-  sitecore.username: '' # Username of the account to connect and download sitecore files
-  sitecore.password: '' #sitecore username
+  #container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io
+  #container.registry.username: '' # Username to connect to the container registry
+  #container.registry.password: '' # password to connect to the container registry
+  #sitecore.username: '' # Username of the account to connect and download sitecore files
+  #sitecore.password: '' #sitecore username
 
   # Environment specific variables.
   windows.install.source.path: 'Z:\' # Path to store sitecore downloads on windows.
