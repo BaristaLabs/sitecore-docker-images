@@ -62,7 +62,7 @@ stages:
         steps:
           - powershell: |
               Test-NetConnection -ComputerName "$(assets.shared.folder.server)" -Port 445
-              Invoke-Expression -Command "cmdkey /add:$(assets.shared.folder.server) /user:Azure\dockerassets /pass:$(assets.azure.fileshare.password)"
+              Invoke-Expression -Command "cmdkey /add:$(assets.shared.folder.server) /user:Azure\baristalabsdockerassets /pass:$(assets.azure.fileshare.password)"
               New-PSDrive -Name Z -PSProvider FileSystem -Root "\\$(assets.shared.folder.server)\docker-assets" -Persist -ErrorAction SilentlyContinue
             condition: eq(variables['assets.useDrive'], 'true')
             displayName: "Connect Asset Drive (optional)"
