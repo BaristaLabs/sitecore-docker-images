@@ -56,6 +56,9 @@ function Invoke-Build
         ,
         [Parameter(Mandatory = $false)]
         [switch]$SkipHashValidation
+        ,
+        [Parameter(Mandatory = $false)]
+        [switch]$isolationMode = "hyperv"
     )
 
     # Setup
@@ -199,7 +202,9 @@ function Invoke-Build
 
             if ($osType -eq "windows")
             {
-                $buildOptions.Add("--isolation 'hyperv'")
+                if ($isolationMode -eq "hyperv") {
+                    $buildOptions.Add("--isolation 'hyperv'")
+                }
             }
 
             $spec.BuildOptions | ForEach-Object {
