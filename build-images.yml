@@ -120,7 +120,7 @@ stages:
                   sudo mkdir /etc/smbcredentials
                   fi
                   if [ ! -f "/etc/smbcredentials/dockerassets.cred" ]; then
-                      sudo bash -c 'echo "username=dockerassets" >> /etc/smbcredentials/dockerassets.cred'
+                      sudo bash -c 'echo "username=baristalabsdockerassets" >> /etc/smbcredentials/dockerassets.cred'
                       sudo bash -c 'echo "password=$(assets.azure.fileshare.password)" >> /etc/smbcredentials/dockerassets.cred'
                   fi
                   sudo chmod 600 /etc/smbcredentials/dockerassets.cred
