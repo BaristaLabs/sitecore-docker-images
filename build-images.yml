@@ -19,6 +19,7 @@
 # - build.includeJss
 # - build.skipExistingImages
 # - build.includeExperimentalImages
+# - build.linuxImages
 
 # Sitecore credentials
 # - sitecore.username
