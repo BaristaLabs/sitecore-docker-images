@@ -1,12 +1,7 @@
 # The following variables need to be set in Azure Devops:
 
 # Azure
-# - azure.subscription
-# - azure.agentPoolName
-# - azure.vm.resourceGroupName
-# - (optional) azure.vm.linux.name
-# - azure.vm.windows.name
-#
+
 # Image build options
 # - build.tags
 # - build.pushMode
