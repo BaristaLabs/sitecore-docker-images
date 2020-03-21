@@ -1,0 +1,63 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+
+schedules:
+  - cron: "0 12 * * 0"
+    displayName: Weekly Sunday build
+    branches:
+      include:
+      - master
+    always: true
+
+variables:
+  # Variables associated with being able to store assets in an Azure Storage Account File Share
+  assets.useDrive: 'false' # true or false - if true the network drive will be mapped to Z: on windows and linux.install.source.path on linux
+  assets.shared.folder.server: '' # indicates the primary file service endpoint e.g myassets.file.core.windows.net. Expects the file share to be /docker-assets
+  asset.azure.fileshare.password: '' # indicates the password (key) that will be used to connect to the server.
+
+  # Variables associated with specifying what's built
+  build.pruneImages: 'false' # Useful on hosted build agents
+  build.sitecoreVersion: '9.3.0'
+  build.sitecoreTopology: '@(''xm'', ''xp'', ''xc'')'
+  build.windowsOSVersion: 'ltsc2019'
+  build.includeJss: 'true'
+  build.includeSpe: 'true'
+  build.includeSxa: 'true'
+  build.includeExperimentalImages: 'false'
+  build.isolationMode: '' # blank or hyperv - useful on hosted build agents
+  build.skipExistingImages: 'true'
+
+  # Variables associated with the container registry to use
+  container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io
+  container.registry.username: '' # Username to connect to the container registry
+  container.registry.password: '' # password to connect to the container registry
+  sitecore.username: '' # Username of the account to connect and download sitecore files
+  sitecore.password: '' #sitecore username
+
+  # Environment specific variables.
+  windows.install.source.path: 'Z:\' # Path to store sitecore downloads on windows.
+  linux.buildImages: 'true' # true or false - if true linux images will also be built.
+  linux.install.source.path: '/mnt/dockerassets' # Path to store sitecore downloads on linux.
+
+stages:
+  - stage: Build_Images
+    jobs:
+      - job: Build_Windows_Images
+        timeoutInMinutes: 720
+        displayName: "Build Windows XM Images"
+        pool:
+          vmImage: 'windows-2019'
+        steps:
+          - template: pipeline-templates/windows-build-steps.yml
+      - job: Build_Linux_Images
+        timeoutInMinutes: 720
+        displayName: "Build Linux Images"
+        condition: eq(variables['build.linuxImages'], 'true')
+        pool:
+          vmImage: 'ubuntu-18.04'
+        steps:
+          - template: pipeline-templates/linux-build-steps.yml
+

@@ -1,20 +1,24 @@
 # The following variables need to be set in Azure Devops:
 
 # Azure
-
+# - azure.subscription
+# - azure.agentPoolName
+# - azure.vm.resourceGroupName
+# - (optional) azure.vm.linux.name
+# - azure.vm.windows.name
+#
 # Image build options
 # - build.tags
 # - build.pushMode
 # - build.pruneImages
 # - build.sitecoreVersion
 # - build.sitecoreTopology
-# - build.windowsOSVersion
+# - build.sitecoreWindowsVersion
 # - build.includeSpe
 # - build.includeSxa
 # - build.includeJss
 # - build.skipExistingImages
 # - build.includeExperimentalImages
-# - build.linuxImages
 
 # Sitecore credentials
 # - sitecore.username
@@ -52,30 +56,29 @@ schedules:
 
 stages:
 
-  - stage: Build_Windows_Images
+  - stage: Build_Wndows_Images
     jobs:
       - job: Build_Windows_Images
         timeoutInMinutes: 720
         displayName: "Build Windows Images"
         pool:
-          vmImage: 'windows-2019'
+          name: $(azure.agentPoolName)
         steps:
           - powershell: |
               Test-NetConnection -ComputerName "$(assets.shared.folder.server)" -Port 445
-              Invoke-Expression -Command "cmdkey /add:$(assets.shared.folder.server) /user:Azure\baristalabsdockerassets /pass:$(assets.azure.fileshare.password)"
+              Invoke-Expression -Command "cmdkey /add:$(assets.shared.folder.server) /user:Azure\dockerassets /pass:$(assets.azure.fileshare.password)"
               New-PSDrive -Name Z -PSProvider FileSystem -Root "\\$(assets.shared.folder.server)\docker-assets" -Persist -ErrorAction SilentlyContinue
             condition: eq(variables['assets.useDrive'], 'true')
             displayName: "Connect Asset Drive (optional)"
           - task: Docker@2
             displayName: "Docker registry login"
             inputs:
-              containerRegistry: 'BaristaLabs_ACR'
-              command: 'login'
+              containerRegistry: "docker-registry"
+              command: login
           - checkout: self
             clean: true
           - powershell: |
               "$(container.registry.password)" | docker login -u "$(container.registry.username)" --password-stdin $(container.registry.fullname)
-              dism /Online /Enable-Feature=Containers
               $buildProps = @{
                 InstallSourcePath = "$(windows.install.source.path)"
                 SitecoreUsername = "$(sitecore.username)"
@@ -85,22 +88,19 @@ stages:
                 RegistryPassword = "$(container.registry.password)"
                 SitecoreVersion = "$(build.sitecoreVersion)"
                 Topology = $(build.sitecoreTopology)
-                OSVersion = "$(build.windowsOSVersion)"
+                OSVersion = "$(build.WindowsOSVersion)"
                 IncludeSpe = [System.Convert]::ToBoolean($(build.includeSpe))
                 IncludeSxa = [System.Convert]::ToBoolean($(build.includeSxa))
                 IncludeJss = [System.Convert]::ToBoolean($(build.includeJss))
-                IsolationMode = ""
                 IncludeExperimental = [System.Convert]::ToBoolean($(build.includeExperimentalImages))
                 SkipExistingImage = [System.Convert]::ToBoolean($(build.skipExistingImages))
               }
-
               .\Build.ps1 @buildProps
             displayName: "Build Images"
           - powershell: |
                 docker image prune --force
             condition: and(succeeded(), eq(variables['build.pruneImages'], 'true'))
             displayName: 'Prune images (optional)'
-
       - job: Build_Linux_Images
         timeoutInMinutes: 720
         displayName: "Build Linux Images"
@@ -117,24 +117,22 @@ stages:
                   exit 0
                   fi
                   sudo mkdir $(linux.install.source.path)
-
                   if [ ! -d "/etc/smbcredentials" ]; then
                   sudo mkdir /etc/smbcredentials
                   fi
                   if [ ! -f "/etc/smbcredentials/dockerassets.cred" ]; then
-                      sudo bash -c 'echo "username=baristalabsdockerassets" >> /etc/smbcredentials/dockerassets.cred'
+                      sudo bash -c 'echo "username=dockerassets" >> /etc/smbcredentials/dockerassets.cred'
                       sudo bash -c 'echo "password=$(assets.azure.fileshare.password)" >> /etc/smbcredentials/dockerassets.cred'
                   fi
                   sudo chmod 600 /etc/smbcredentials/dockerassets.cred
-
                   sudo bash -c 'echo "//$(assets.shared.folder.server)/docker-assets $(linux.install.source.path) cifs nofail,vers=3.0,credentials=/etc/smbcredentials/dockerassets.cred,dir_mode=0777,file_mode=0777,serverino" >> /etc/fstab'
                   sudo mount -t cifs //$(assets.shared.folder.server)/docker-assets $(linux.install.source.path) -o vers=3.0,credentials=/etc/smbcredentials/dockerassets.cred,dir_mode=0777,file_mode=0777,serverino
           - task: Docker@2
             enabled: true
             displayName: "Docker registry login"
             inputs:
-              containerRegistry: 'BaristaLabs_ACR'
-              command: 'login'
+                containerRegistry: "docker-registry"
+                command: login
           - checkout: self
             clean: true
           - powershell: |
@@ -155,7 +153,6 @@ stages:
                   IncludeExperimental = [System.Convert]::ToBoolean($(build.includeExperimentalImages))
                   SkipExistingImage = [System.Convert]::ToBoolean($(build.skipExistingImages))
                 }
-
                 .\Build.ps1 @buildProps
             displayName: "Build Linux Images"
           - powershell: |
