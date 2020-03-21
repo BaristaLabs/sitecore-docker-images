@@ -73,8 +73,8 @@ stages:
           - task: Docker@2
             displayName: "Docker registry login"
             inputs:
-              containerRegistry: "docker-registry"
-              command: login
+              containerRegistry: 'BaristaLabs_ACR'
+              command: 'login'
           - checkout: self
             clean: true
           - powershell: |
@@ -135,8 +135,8 @@ stages:
             enabled: true
             displayName: "Docker registry login"
             inputs:
-                containerRegistry: "docker-registry"
-                command: login
+              containerRegistry: 'BaristaLabs_ACR'
+              command: 'login'
           - checkout: self
             clean: true
           - powershell: |
