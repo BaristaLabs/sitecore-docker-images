@@ -23,12 +23,12 @@ variables:
   build.sitecoreVersion: '9.3.0'
   build.sitecoreTopology: '@(''xm'', ''xp'', ''xc'')'
   build.windowsOSVersion: 'ltsc2019'
-  build.includeJss: 'true'
-  build.includeSpe: 'true'
-  build.includeSxa: 'true'
-  build.includeExperimentalImages: 'false'
+  build.includeJss: '$true'
+  build.includeSpe: '$true'
+  build.includeSxa: '$true'
+  build.includeExperimentalImages: '$false'
   build.isolationMode: '' # blank or hyperv - useful on hosted build agents
-  build.skipExistingImages: 'true'
+  build.skipExistingImages: '$true'
 
   # Variables associated with the container registry to use
   container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io
@@ -39,7 +39,7 @@ variables:
 
   # Environment specific variables.
   windows.install.source.path: 'Z:\' # Path to store sitecore downloads on windows.
-  linux.buildImages: 'true' # true or false - if true linux images will also be built.
+  build.linuxImages: 'true' # true or false - if true linux images will also be built.
   linux.install.source.path: '/mnt/dockerassets' # Path to store sitecore downloads on linux.
 
 stages:
