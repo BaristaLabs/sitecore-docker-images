@@ -62,7 +62,7 @@ stages:
         timeoutInMinutes: 720
         displayName: "Build Windows Images"
         pool:
-          name: $(azure.agentPoolName)
+          vmImage: 'windows-2019'
         steps:
           - powershell: |
               Test-NetConnection -ComputerName "$(assets.shared.folder.server)" -Port 445
