@@ -13,8 +13,8 @@ steps:
   - checkout: self
     clean: true
   - powershell: |
-      "$(container.registry.password)" | docker login -u "$(container.registry.username)" --password-stdin $(container.registry.fullname)
       dism /Online /Enable-Feature=Containers
+      "$(container.registry.password)" | docker login -u "$(container.registry.username)" --password-stdin $(container.registry.fullname)
       $buildProps = @{
         InstallSourcePath = "$(windows.install.source.path)"
         SitecoreUsername = "$(sitecore.username)"
