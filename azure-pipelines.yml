@@ -32,8 +32,6 @@ variables:
 
   # Variables associated with the container registry to use
   #container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io
-  #container.registry.username: '' # Username to connect to the container registry
-  #container.registry.password: '' # password to connect to the container registry
   #sitecore.username: '' # Username of the account to connect and download sitecore files
   #sitecore.password: '' #sitecore username
 
