@@ -21,7 +21,7 @@ variables:
   # Variables associated with specifying what's built
   build.pruneImages: 'false' # Useful on hosted build agents
   build.sitecoreVersion: '9.3.0'
-  build.sitecoreTopology: '@(''xm'', ''xp'', ''xc'')'
+  build.sitecoreTopology: '@("xm", "xp", "xc")'
   build.windowsOSVersion: 'ltsc2019'
   build.includeJss: '$true'
   build.includeSpe: '$true'
@@ -47,7 +47,7 @@ stages:
     jobs:
       - job: Build_Windows_Images
         timeoutInMinutes: 720
-        displayName: "Build Windows XM Images"
+        displayName: "Build Windows Images"
         pool:
           vmImage: 'windows-2019'
         steps:
