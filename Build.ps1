@@ -15,10 +15,6 @@ param(
     [Parameter()]
     [string]$Registry = "",
     [Parameter()]
-    [string]$RegistryUserName = "",
-    [Parameter()]
-    [string]$RegistryPassword = "",
-    [Parameter()]
     [ValidateSet("9.3.0", "9.2.0", "9.1.1", "9.0.2")]
     [string[]]$SitecoreVersion = @("9.3.0"),
     [ValidateSet("xm", "xp", "xc")]
