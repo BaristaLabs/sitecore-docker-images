@@ -14,14 +14,14 @@ steps:
     clean: true
   - powershell: |
       dism /Online /Enable-Feature=Containers
-      "$(container.registry.password)" | docker login -u "$(container.registry.username)" --password-stdin $(container.registry.fullname)
+      "$env:CONTAINER_REGISTRY_PASSWORD" | docker login -u "$env:CONTAINER_REGISTRY_USERNAME" --password-stdin "$env:CONTAINER_REGISTRY_FULLNAME"
       $buildProps = @{
         InstallSourcePath = "$(windows.install.source.path)"
-        SitecoreUsername = "$(sitecore.username)"
-        SitecorePassword = "$(sitecore.password)"
-        Registry = "$(container.registry.fullname)"
-        RegistryUserName = "$(container.registry.username)"
-        RegistryPassword = "$(container.registry.password)"
+        SitecoreUsername = "$env:SITECORE_USERNAME"
+        SitecorePassword = "$env:SITECORE_PASSWORD"
+        Registry = "$env:CONTAINER_REGISTRY_FULLNAME"
+        RegistryUserName = "$env:CONTAINER_REGISTRY_USERNAME"
+        RegistryPassword = "$env:CONTAINER_REGISTRY_PASSWORD"
         SitecoreVersion = "$(build.sitecoreVersion)"
         Topology = $(build.sitecoreTopology)
         OSVersion = "$(build.windowsOSVersion)"
