@@ -5,20 +5,20 @@ steps:
       New-PSDrive -Name Z -PSProvider FileSystem -Root "\\$(assets.shared.folder.server)\docker-assets" -Persist -ErrorAction SilentlyContinue
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: "Connect Asset Drive (optional)"
-  - task: Docker@2
-    displayName: "Docker registry login"
-    inputs:
-      containerRegistry: 'BaristaLabs_ACR'
-      command: 'login'
   - powershell: |
       md -Force -Path Z:\Docker\Windows | Out-Null
       Stop-Service docker
-      $daemon = Get-Content -Raw -Path C:\ProgramData\Docker\config\daemon.json | ConvertFrom-Json -AsHashtable
+      $daemon = Get-Content -Raw -Path C:\ProgramData\Docker\config\daemon.json | ConvertFrom-Json
       $daemon["data-root"] = "Z:\Docker\Windows"
       ConvertTo-Json $daemon | Set-Content -Path C:\ProgramData\Docker\config\daemon.json
       Start-Service docker
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: 'Set Docker Data Root (optional)'
+  - task: Docker@2
+    displayName: "Docker registry login"
+    inputs:
+      containerRegistry: 'BaristaLabs_ACR'
+      command: 'login'
   - checkout: self
     clean: true
   - powershell: |
