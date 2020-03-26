@@ -10,17 +10,17 @@ steps:
     inputs:
       containerRegistry: 'BaristaLabs_ACR'
       command: 'login'
-  - checkout: self
-    clean: true
   - powershell: |
-      md -Force -Path Z:\Docker | Out-Null
+      md -Force -Path Z:\Docker\Windows | Out-Null
       Stop-Service docker
       $daemon = Get-Content -Raw -Path C:\ProgramData\Docker\config\daemon.json | ConvertFrom-Json -AsHashtable
-      $daemon["data-root"] = "Z:\Docker"
+      $daemon["data-root"] = "Z:\Docker\Windows"
       ConvertTo-Json $daemon | Set-Content -Path C:\ProgramData\Docker\config\daemon.json
       Start-Service docker
     condition: and(succeeded(), eq(variables['build.useDrive'], 'true'))
     displayName: 'Set Docker Data Root (optional)'
+  - checkout: self
+    clean: true
   - powershell: |
       dism /Online /Enable-Feature=Containers
       $buildProps = @{
