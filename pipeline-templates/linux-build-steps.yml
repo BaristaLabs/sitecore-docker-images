@@ -20,14 +20,15 @@ steps:
 
           sudo bash -c 'echo "//$(assets.shared.folder.server)/docker-assets $(linux.install.source.path) cifs nofail,vers=3.0,credentials=/etc/smbcredentials/dockerassets.cred,dir_mode=0777,file_mode=0777,serverino" >> /etc/fstab'
           sudo mount -t cifs //$(assets.shared.folder.server)/docker-assets $(linux.install.source.path) -o vers=3.0,credentials=/etc/smbcredentials/dockerassets.cred,dir_mode=0777,file_mode=0777,serverino
-  - powershell: |
-      New-Item -Itemtype "directory" -Force -Path $(linux.install.source.path)/Docker/Linux | Out-Null
-      sudo systemctl stop docker
-      $daemon = Get-Content -Raw -Path /etc/docker/daemon.json | ConvertFrom-Json
-      Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "$(linux.install.source.path)/Docker/Linux"
-      ConvertTo-Json $daemon | sudo tee /etc/docker/daemon.json
-      sudo systemctl start docker
-      docker info
+  # It would be nice if this worked, but its not possible to symlink to cifs mounts
+  # - powershell: |
+  #     New-Item -Itemtype "directory" -Force -Path $(linux.install.source.path)/Docker/Linux | Out-Null
+  #     sudo systemctl stop docker
+  #     $daemon = Get-Content -Raw -Path /etc/docker/daemon.json | ConvertFrom-Json
+  #     Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "$(linux.install.source.path)/Docker/Linux"
+  #     ConvertTo-Json $daemon | sudo tee /etc/docker/daemon.json
+  #     sudo systemctl start docker
+  #     docker info
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: 'Set Docker Data Root (optional)'
   - task: Docker@2

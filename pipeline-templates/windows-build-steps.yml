@@ -5,17 +5,18 @@ steps:
       New-PSDrive -Name Z -PSProvider FileSystem -Root "\\$(assets.shared.folder.server)\docker-assets" -Persist -ErrorAction SilentlyContinue
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: "Connect Asset Drive (optional)"
-  - powershell: |
-      New-Item -Itemtype "directory" -Force -Path Z:\Docker\Windows | Out-Null
-      
-      $daemon = "{}" | ConvertFrom-Json
-      if (Test-Path -Path "$env:programdata\Docker\config\daemon.json") {
-        $daemon = Get-Content -Raw -Path "$env:programdata\Docker\config\daemon.json" | ConvertFrom-Json
-      }
-      Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "Z:\Docker\Windows"
-      ConvertTo-Json $daemon | Set-Content -Path "$env:programdata\Docker\config\daemon.json"
-      Restart-Service *docker*
-      docker info
+  # It would be nice if this worked, but the docker service fails to start.
+  # - powershell: |
+  #     New-Item -Itemtype "directory" -Force -Path Z:\Docker\Windows | Out-Null
+
+  #     $daemon = "{}" | ConvertFrom-Json
+  #     if (Test-Path -Path "$env:programdata\Docker\config\daemon.json") {
+  #       $daemon = Get-Content -Raw -Path "$env:programdata\Docker\config\daemon.json" | ConvertFrom-Json
+  #     }
+  #     Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "Z:\Docker\Windows"
+  #     ConvertTo-Json $daemon | Set-Content -Path "$env:programdata\Docker\config\daemon.json"
+  #     Restart-Service *docker*
+  #     docker info
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: 'Set Docker Data Root (optional)'
   - task: Docker@2
