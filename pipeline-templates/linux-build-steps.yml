@@ -29,8 +29,8 @@ steps:
   #     ConvertTo-Json $daemon | sudo tee /etc/docker/daemon.json
   #     sudo systemctl start docker
   #     docker info
-    condition: eq(variables['assets.useDrive'], 'true')
-    displayName: 'Set Docker Data Root (optional)'
+  #   condition: eq(variables['assets.useDrive'], 'true')
+  #   displayName: 'Set Docker Data Root (optional)'
   - task: Docker@2
     enabled: true
     displayName: "Docker registry login"

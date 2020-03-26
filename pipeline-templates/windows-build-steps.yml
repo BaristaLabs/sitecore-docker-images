@@ -17,8 +17,8 @@ steps:
   #     ConvertTo-Json $daemon | Set-Content -Path "$env:programdata\Docker\config\daemon.json"
   #     Restart-Service *docker*
   #     docker info
-    condition: eq(variables['assets.useDrive'], 'true')
-    displayName: 'Set Docker Data Root (optional)'
+  #    condition: eq(variables['assets.useDrive'], 'true')
+  #    displayName: 'Set Docker Data Root (optional)'
   - task: Docker@2
     displayName: "Docker registry login"
     inputs:
