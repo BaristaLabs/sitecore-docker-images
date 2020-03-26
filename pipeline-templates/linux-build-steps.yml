@@ -26,8 +26,8 @@ steps:
       $daemon = Get-Content -Raw -Path /etc/docker/daemon.json | ConvertFrom-Json
       Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "$(linux.install.source.path)/Docker/Linux"
       $data = ConvertTo-Json $daemon
-      sudo Set-Content -Path /etc/docker/daemon.json -Value $data
-      systemctl start docker
+      sudo pwsh Set-Content -Path /etc/docker/daemon.json -Value $data
+      sudo systemctl start docker
       docker info
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: 'Set Docker Data Root (optional)'
