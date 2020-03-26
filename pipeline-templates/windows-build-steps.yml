@@ -6,12 +6,13 @@ steps:
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: "Connect Asset Drive (optional)"
   - powershell: |
-      md -Force -Path Z:\Docker\Windows | Out-Null
+      New-Item -Itemtype "directory" -Force -Path Z:\Docker\Windows | Out-Null
       Stop-Service docker
-      $daemon = Get-Content -Raw -Path C:\ProgramData\Docker\config\daemon.json | ConvertFrom-Json
+      $daemon = Get-Content -Raw -Path %programdata%\Docker\config\daemon.json | ConvertFrom-Json
       Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "Z:\Docker\Windows"
       ConvertTo-Json $daemon | Set-Content -Path C:\ProgramData\Docker\config\daemon.json
       Start-Service docker
+      docker info
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: 'Set Docker Data Root (optional)'
   - task: Docker@2

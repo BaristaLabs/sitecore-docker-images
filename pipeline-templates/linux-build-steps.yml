@@ -21,12 +21,13 @@ steps:
           sudo bash -c 'echo "//$(assets.shared.folder.server)/docker-assets $(linux.install.source.path) cifs nofail,vers=3.0,credentials=/etc/smbcredentials/dockerassets.cred,dir_mode=0777,file_mode=0777,serverino" >> /etc/fstab'
           sudo mount -t cifs //$(assets.shared.folder.server)/docker-assets $(linux.install.source.path) -o vers=3.0,credentials=/etc/smbcredentials/dockerassets.cred,dir_mode=0777,file_mode=0777,serverino
   - powershell: |
-      md -Force -Path $(linux.install.source.path)/Docker/Linux | Out-Null
+      New-Item -Itemtype "directory" -Force -Path $(linux.install.source.path)/Docker/Linux | Out-Null
       systemctl stop docker
       $daemon = Get-Content -Raw -Path /etc/docker/daemon.json | ConvertFrom-Json
       Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "$(linux.install.source.path)/Docker/Linux"
       ConvertTo-Json $daemon | Set-Content -Path /etc/docker/daemon.json
       systemctl start docker
+      docker info
     condition: eq(variables['assets.useDrive'], 'true')
     displayName: 'Set Docker Data Root (optional)'
   - task: Docker@2
