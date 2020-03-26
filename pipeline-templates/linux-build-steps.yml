@@ -24,7 +24,7 @@ steps:
       md -Force -Path $(linux.install.source.path)/Docker/Linux | Out-Null
       systemctl stop docker
       $daemon = Get-Content -Raw -Path /etc/docker/daemon.json | ConvertFrom-Json
-      $daemon["data-root"] = "$(linux.install.source.path)/Docker/Linux"
+      Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "$(linux.install.source.path)/Docker/Linux"
       ConvertTo-Json $daemon | Set-Content -Path /etc/docker/daemon.json
       systemctl start docker
     condition: eq(variables['assets.useDrive'], 'true')
