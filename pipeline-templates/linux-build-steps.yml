@@ -22,10 +22,11 @@ steps:
           sudo mount -t cifs //$(assets.shared.folder.server)/docker-assets $(linux.install.source.path) -o vers=3.0,credentials=/etc/smbcredentials/dockerassets.cred,dir_mode=0777,file_mode=0777,serverino
   - powershell: |
       New-Item -Itemtype "directory" -Force -Path $(linux.install.source.path)/Docker/Linux | Out-Null
-      systemctl stop docker
+      sudo systemctl stop docker
       $daemon = Get-Content -Raw -Path /etc/docker/daemon.json | ConvertFrom-Json
       Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "$(linux.install.source.path)/Docker/Linux"
-      ConvertTo-Json $daemon | Set-Content -Path /etc/docker/daemon.json
+      $data = ConvertTo-Json $daemon
+      sudo Set-Content -Path /etc/docker/daemon.json -Value $data
       systemctl start docker
       docker info
     condition: eq(variables['assets.useDrive'], 'true')

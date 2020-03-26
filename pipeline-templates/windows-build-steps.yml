@@ -8,9 +8,9 @@ steps:
   - powershell: |
       New-Item -Itemtype "directory" -Force -Path Z:\Docker\Windows | Out-Null
       Stop-Service docker
-      $daemon = Get-Content -Raw -Path %programdata%\Docker\config\daemon.json | ConvertFrom-Json
+      $daemon = Get-Content -Raw -Path "$env:programdata\Docker\config\daemon.json" | ConvertFrom-Json
       Add-Member -InputObject $daemon -MemberType NoteProperty -Name "data-root" -Value "Z:\Docker\Windows"
-      ConvertTo-Json $daemon | Set-Content -Path C:\ProgramData\Docker\config\daemon.json
+      ConvertTo-Json $daemon | Set-Content -Path "$env:programdata\Docker\config\daemon.json"
       Start-Service docker
       docker info
     condition: eq(variables['assets.useDrive'], 'true')
