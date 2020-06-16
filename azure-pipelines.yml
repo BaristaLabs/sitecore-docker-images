@@ -4,13 +4,13 @@ trigger:
     include:
     - master
 
-schedules:
-  - cron: "0 10,6 * * *"
-    displayName: Weekly Sunday build
-    branches:
-      include:
-      - master
-    always: true
+# schedules:
+#   - cron: "0 10,6 * * *"
+#     displayName: Weekly Sunday build
+#     branches:
+#       include:
+#       - master
+#     always: true
 
 variables:
   # Variables associated with being able to store assets in an Azure Storage Account File Share
