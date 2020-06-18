@@ -279,7 +279,6 @@ SitecoreImageBuilder\Invoke-Build `
     -InstallSourcePath $InstallSourcePath `
     -Registry $Registry `
     -Tags $tags `
-    -IsolationMode $IsolationMode `
     -ExperimentalTagBehavior:(@{$true = "Include"; $false = "Skip" }[$IncludeExperimental -eq $true]) `
     -IsolationModeBehaviour $IsolationModeBehaviour `
     -WhatIf:$WhatIfPreference
