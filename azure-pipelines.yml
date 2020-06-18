@@ -30,7 +30,7 @@ variables:
   build.skipExistingImages: '$true'
 
   # Variables associated with the container registry to use
-  #container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io
+  #container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io, registry.hub.docker.com/username
   #sitecore.username: '' # Username of the account to connect and download sitecore files
   #sitecore.password: '' #sitecore username
 
