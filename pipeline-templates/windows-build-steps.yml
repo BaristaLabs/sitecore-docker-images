@@ -28,7 +28,6 @@ steps:
     clean: true
   - powershell: |
       dism /Online /Enable-Feature=Containers
-      Write-Host "isolation mode: $(build.isolationModeBehaviour)"
       $buildProps = @{
         InstallSourcePath = "$(windows.install.source.path)"
         SitecoreUsername = "$(sitecore.username)"
@@ -40,9 +39,9 @@ steps:
         IncludeSpe = [System.Convert]::ToBoolean($(build.includeSpe))
         IncludeSxa = [System.Convert]::ToBoolean($(build.includeSxa))
         IncludeJss = [System.Convert]::ToBoolean($(build.includeJss))
-        IsolationModeBehaviour = "$(build.isolationModeBehaviour)"
-        IncludeExperimental = [System.Convert]::ToBoolean($(build.includeExperimentalImages))
         SkipExistingImage = [System.Convert]::ToBoolean($(build.skipExistingImages))
+        IncludeExperimental = [System.Convert]::ToBoolean($(build.includeExperimentalImages))
+        IsolationModeBehaviour = "$(build.isolationModeBehaviour)"
       }
       .\Build.ps1 @buildProps -Verbose
     displayName: "Build Images"
