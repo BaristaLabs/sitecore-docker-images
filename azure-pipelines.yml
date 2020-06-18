@@ -26,7 +26,7 @@ variables:
   build.includeSpe: '$true'
   build.includeSxa: '$true'
   build.includeExperimentalImages: '$false'
-  build.isolationModeBehaviour: '' # blank or hyperv - useful on hosted build agents
+  build.isolationModeBehaviour: 'ForceProcess' # "ForceHyperV", "EngineDefault", "ForceProcess", "ForceDefault" - useful on hosted build agents
   build.skipExistingImages: '$true'
 
   # Variables associated with the container registry to use
