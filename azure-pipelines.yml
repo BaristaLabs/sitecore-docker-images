@@ -29,8 +29,9 @@ variables:
   build.isolationModeBehaviour: 'ForceProcess' # "ForceHyperV", "EngineDefault", "ForceProcess", "ForceDefault" - useful on hosted build agents
   build.skipExistingImages: '$true'
 
-  # Variables associated with the container registry to use
-  #container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io, registry.hub.docker.com/username
+  # Variables associated with the container registry to use - These need to be defined as Azure Pipelines variables (secret)
+  #container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io, index.docker.io/username, <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<optional_namespace>
+  #We should be able to get rid of the above variable through using docker info - e.g. echo $(docker info | grep -oP "(?<=Registry: ).*")
   #sitecore.username: '' # Username of the account to connect and download sitecore files
   #sitecore.password: '' #sitecore username
 
