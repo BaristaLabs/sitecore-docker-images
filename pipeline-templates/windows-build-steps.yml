@@ -22,7 +22,7 @@ steps:
   - task: Docker@2
     displayName: "Docker registry login"
     inputs:
-      containerRegistry: 'BaristaLabs_ACR'
+      containerRegistry: 'docker-registry'
       command: 'login'
   - checkout: self
     clean: true
@@ -39,7 +39,7 @@ steps:
         IncludeSpe = [System.Convert]::ToBoolean($(build.includeSpe))
         IncludeSxa = [System.Convert]::ToBoolean($(build.includeSxa))
         IncludeJss = [System.Convert]::ToBoolean($(build.includeJss))
-        IsolationMode = "$(build.isolationMode)"
+        IsolationModeBehaviour = "$(build.IsolationModeBehaviour)"
         IncludeExperimental = [System.Convert]::ToBoolean($(build.includeExperimentalImages))
         SkipExistingImage = [System.Convert]::ToBoolean($(build.skipExistingImages))
       }

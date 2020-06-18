@@ -58,7 +58,8 @@ function Invoke-Build
         [switch]$SkipHashValidation
         ,
         [Parameter(Mandatory = $false)]
-        [string]$isolationMode = "hyperv"
+        [ValidateSet("ForceHyperV", "EngineDefault", "ForceProcess", "ForceDefault")]
+        [string]$IsolationModeBehaviour = "ForceHyperV"
     )
 
     # Setup
@@ -84,7 +85,7 @@ function Invoke-Build
     # Print results
     $specs | Select-Object -Property Tag, Include, Deprecated, Priority, Base | Format-Table
 
-    # Determine OS
+    # Determine OS (windows or linux)
     $osType = (docker system info --format '{{json .}}' | ConvertFrom-Json | ForEach-Object { $_.OSType })
 
     Write-Message "Build specifications loaded..." -Level Info
@@ -200,11 +201,20 @@ function Invoke-Build
             # Build image
             $buildOptions = New-Object System.Collections.Generic.List[System.Object]
 
-            if ($osType -eq "windows")
-            {
-                if ($isolationMode -eq "hyperv") {
-                    $buildOptions.Add("--isolation 'hyperv'")
-                }
+            if ($osType -ieq "windows" -and $IsolationModeBehaviour -ieq "ForceHyperV") {
+                # --isolation 'hyperv' | makes sense on windows host only?
+                $buildOptions.Add("--isolation 'hyperv'")
+            }
+            elseif ($osType -ieq "windows" -and $IsolationModeBehaviour -ieq "ForceProcess") {
+                # --isolation 'process' | works only on windows
+                $buildOptions.Add("--isolation 'process'")
+            }
+			elseif ($osType -ne "windows" -and $IsolationModeBehaviour -ieq "ForceDefault") {
+				# --isolation 'default' | works on non-windows
+				$buildOptions.Add("--isolation 'default'")
+			}
+            else {
+                # no --isolation option | also use engine default if none of the above has been selected
             }
 
             $spec.BuildOptions | ForEach-Object {

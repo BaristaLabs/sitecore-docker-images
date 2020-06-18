@@ -19,7 +19,7 @@ param(
     [string[]]$SitecoreVersion = @("9.3.0"),
     [ValidateSet("xm", "xp", "xc")]
     [string[]]$Topology = @("xm", "xp"),
-    [ValidateSet("1909", "1903", "ltsc2019", "linux")]
+    [ValidateSet("2004", "1909", "1903", "ltsc2019", "linux")]
     [string[]]$OSVersion = @("ltsc2019"),
     [Parameter()]
     [switch]$IncludeSpe,
@@ -32,7 +32,8 @@ param(
     [Parameter()]
     [switch]$IncludeExperimental,
     [Parameter(Mandatory = $false)]
-    [string]$IsolationMode = "hyperv"
+    [ValidateSet("ForceHyperV", "EngineDefault", "ForceProcess", "ForceDefault")]
+    [string]$IsolationModeBehaviour = "ForceHyperV"
 )
 
 function Write-Message
@@ -60,6 +61,7 @@ Import-Module (Join-Path $PSScriptRoot "\modules\SitecoreImageBuilder") -Require
 $tags = [System.Collections.ArrayList]@()
 
 $windowsVersionMapping = @{
+    "2004"     = "2004"
     "1909"     = "1909"
     "1903"     = "1903"
     "ltsc2019" = "1809"
@@ -92,7 +94,8 @@ filter SitecoreFilter
 }
 
 $rootFolder = "windows"
-if ($OSVersion -eq "linux") {
+if ($OSVersion -eq "linux")
+{
     $rootFolder = "linux"
 }
 
@@ -152,7 +155,8 @@ foreach ($wv in $OSVersion)
         {
             $xmTags | SitecoreFilter -Version $scv | WindowsFilter -Version $wv | ForEach-Object { $tags.Add($_) > $null }
 
-            if ($wv -eq "linux") {
+            if ($wv -eq "linux")
+            {
                 $xmTags | SitecoreFilter -Version $scv | LinuxFilter | ForEach-Object { $tags.Add($_) > $null }
             }
         }
@@ -161,7 +165,8 @@ foreach ($wv in $OSVersion)
         {
             $xpTags | SitecoreFilter -Version $scv | WindowsFilter -Version $wv | ForEach-Object { $tags.Add($_) > $null }
 
-            if ($wv -eq "linux") {
+            if ($wv -eq "linux")
+            {
                 $xpTags | SitecoreFilter -Version $scv | LinuxFilter | ForEach-Object { $tags.Add($_) > $null }
             }
         }
@@ -181,6 +186,11 @@ foreach ($wv in $OSVersion)
             if ($Topology -contains "xp")
             {
                 $xpSpeTags | SitecoreFilter -Version $scv | WindowsFilter -Version $wv | ForEach-Object { $tags.Add($_) > $null }
+
+                if ($wv -eq "linux")
+                {
+                    $xpSpeTags | SitecoreFilter -Version $scv | LinuxFilter | ForEach-Object { $tags.Add($_) > $null }
+                }
             }
 
             if ($Topology -contains "xc")
@@ -199,6 +209,11 @@ foreach ($wv in $OSVersion)
             if ($Topology -contains "xp")
             {
                 $xpSxaTags | SitecoreFilter -Version $scv | WindowsFilter -Version $wv | ForEach-Object { $tags.Add($_) > $null }
+
+                if ($wv -eq "linux")
+                {
+                    $xpSxaTags | SitecoreFilter -Version $scv | LinuxFilter | ForEach-Object { $tags.Add($_) > $null }
+                }
             }
 
             if ($Topology -contains "xc")
@@ -266,4 +281,5 @@ SitecoreImageBuilder\Invoke-Build `
     -Tags $tags `
     -IsolationMode $IsolationMode `
     -ExperimentalTagBehavior:(@{$true = "Include"; $false = "Skip" }[$IncludeExperimental -eq $true]) `
+    -IsolationModeBehaviour $IsolationModeBehaviour `
     -WhatIf:$WhatIfPreference

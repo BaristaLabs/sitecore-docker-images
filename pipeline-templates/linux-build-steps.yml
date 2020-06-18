@@ -35,7 +35,7 @@ steps:
     enabled: true
     displayName: "Docker registry login"
     inputs:
-      containerRegistry: 'BaristaLabs_ACR'
+      containerRegistry: 'docker-registry'
       command: 'login'
   - checkout: self
     clean: true
