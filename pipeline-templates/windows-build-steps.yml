@@ -28,6 +28,7 @@ steps:
     clean: true
   - powershell: |
       dism /Online /Enable-Feature=Containers
+      Write-Host $(build.isolationModeVehaviour)
       $buildProps = @{
         InstallSourcePath = "$(windows.install.source.path)"
         SitecoreUsername = "$(sitecore.username)"
