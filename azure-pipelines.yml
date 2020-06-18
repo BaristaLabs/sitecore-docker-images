@@ -46,6 +46,9 @@ stages:
       - job: Build_Windows_Images
         timeoutInMinutes: 720
         displayName: "Build Windows Images"
+        variables:
+          assets.useDrive: 'false'
+          windows.install.source.path: 'C:\src\dxp_sitecore_packages'
         pool: devops-builds
         steps:
           - template: pipeline-templates/windows-build-steps.yml
