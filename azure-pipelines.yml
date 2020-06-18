@@ -26,7 +26,7 @@ variables:
   build.includeSpe: '$true'
   build.includeSxa: '$true'
   build.includeExperimentalImages: '$false'
-  build.isolationModeBehaviour: 'ForceProcess' # "ForceHyperV", "EngineDefault", "ForceProcess", "ForceDefault" - useful on hosted build agents
+  build.isolationModeBehaviour: 'ForceHyperV' # "ForceHyperV", "EngineDefault", "ForceProcess", "ForceDefault" - useful on hosted build agents
   build.skipExistingImages: '$true'
 
   # Variables associated with the container registry to use - These need to be defined as Azure Pipelines variables (secret)
@@ -46,14 +46,15 @@ stages:
       - job: Build_Windows_Images
         timeoutInMinutes: 720
         displayName: "Build Windows Images"
-        pool:
-          vmImage: 'windows-2019'
+        pool: devops-builds
         steps:
           - template: pipeline-templates/windows-build-steps.yml
       - job: Build_Linux_Images
         timeoutInMinutes: 720
         displayName: "Build Linux Images"
         condition: eq(variables['build.linuxImages'], 'true')
+        variables:
+          build.isolationModeBehaviour: 'ForceProcess'
         pool:
           vmImage: 'ubuntu-18.04'
         steps:
