@@ -19,7 +19,7 @@ variables:
 
   # Variables associated with specifying what's built
   build.pruneImages: 'false' # Useful on hosted build agents
-  build.sitecoreVersion: '9.3.0'
+  build.sitecoreVersion: '@("9.3.0")'
   build.sitecoreTopology: '@("xm", "xp", "xc")'
   build.windowsOSVersion: '@("2004", "ltsc2019")'
   build.includeJss: '$true'
