@@ -1,7 +1,6 @@
 function Get-WindowsServerCoreToNanoServerVersionMap
 {
     Write-Output @{
-        "current-windows" = (Get-ComputerInfo).OsVersion;
         "2004"     = "2004";
         "1909"     = "1909";
         "1903"     = "1903";
