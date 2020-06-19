@@ -33,9 +33,9 @@ steps:
         SitecoreUsername = "$(sitecore.username)"
         SitecorePassword = "$(sitecore.password)"
         Registry = "$(container.registry.fullname)"
-        SitecoreVersion = "$(build.sitecoreVersion)"
+        SitecoreVersion = $(build.sitecoreVersion)
         Topology = $(build.sitecoreTopology)
-        OSVersion = "$(build.windowsOSVersion)"
+        OSVersion = $(build.windowsOSVersion)
         IncludeSpe = [System.Convert]::ToBoolean($(build.includeSpe))
         IncludeSxa = [System.Convert]::ToBoolean($(build.includeSxa))
         IncludeJss = [System.Convert]::ToBoolean($(build.includeJss))
