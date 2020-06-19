@@ -21,7 +21,7 @@ variables:
   build.pruneImages: 'false' # Useful on hosted build agents
   build.sitecoreVersion: '@("9.3.0")'
   build.sitecoreTopology: '@("xm", "xp", "xc")'
-  build.windowsOSVersion: '@("2004", "ltsc2019")'
+  build.windowsOSVersion: '@("current-windows","2004", "ltsc2019")'
   build.includeJss: '$true'
   build.includeSpe: '$true'
   build.includeSxa: '$true'

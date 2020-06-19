@@ -19,7 +19,7 @@ param(
     [string[]]$SitecoreVersion = @("9.3.0"),
     [ValidateSet("xm", "xp", "xc")]
     [string[]]$Topology = @("xm", "xp"),
-    [ValidateSet("2004", "1909", "1903", "ltsc2019", "linux")]
+    [ValidateSet("2004", "1909", "1903", "ltsc2019", "linux", "current-windows")]
     [string[]]$OSVersion = @("ltsc2019"),
     [Parameter()]
     [switch]$IncludeSpe,
@@ -61,6 +61,7 @@ Import-Module (Join-Path $PSScriptRoot "\modules\SitecoreImageBuilder") -Require
 $tags = [System.Collections.ArrayList]@()
 
 $windowsVersionMapping = @{
+    "current-windows" = "$((Get-ComputerInfo).OsVersion)"
     "2004"     = "2004"
     "1909"     = "1909"
     "1903"     = "1903"
