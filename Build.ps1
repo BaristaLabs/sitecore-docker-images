@@ -19,7 +19,7 @@ param(
     [string[]]$SitecoreVersion = @("9.3.0"),
     [ValidateSet("xm", "xp", "xc")]
     [string[]]$Topology = @("xm", "xp"),
-    [ValidateSet("current-windows", "2004", "1909", "1903", "ltsc2019", "linux")]
+    [ValidateSet("build-host", "2004", "1909", "1903", "ltsc2019", "linux")]
     [string[]]$OSVersion = @("ltsc2019"),
     [Parameter()]
     [switch]$IncludeSpe,
@@ -61,7 +61,7 @@ Import-Module (Join-Path $PSScriptRoot "\modules\SitecoreImageBuilder") -Require
 $tags = [System.Collections.ArrayList]@()
 
 $windowsVersionMapping = @{
-    "current-windows" = "$((Get-ComputerInfo).OsVersion)"
+    "build-host" = "$((Get-ComputerInfo).OsVersion)"
     "2004"     = "2004"
     "1909"     = "1909"
     "1903"     = "1903"
@@ -139,7 +139,7 @@ foreach ($wv in $OSVersion)
     {
         $wv = "$((Get-ComputerInfo).OsVersion)"
     }
-    
+
     $defaultTags | WindowsFilter -Version $wv | ForEach-Object { $tags.Add($_) > $null }
 
     if ($Topology -contains "xp")
