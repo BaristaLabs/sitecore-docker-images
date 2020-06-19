@@ -135,8 +135,9 @@ $catchAllTags = [System.Linq.Enumerable]::Except([string[]]$availableTags, [stri
 
 foreach ($wv in $OSVersion)
 {
-    if ($wv -eq "current-windows")
+    if ($wv -eq "build-host")
     {
+        Write-Host "Using $((Get-ComputerInfo).OsVersion)!!!"
         $wv = "$((Get-ComputerInfo).OsVersion)"
     }
 
