@@ -1,6 +1,10 @@
 function Get-WindowsServerCoreToNanoServerVersionMap
 {
-    $buildHost = "$((Get-ComputerInfo).OsVersion)"
+    $buildHost = "build-host"
+    if ((Get-Command "Get-ComputerInfo" -errorAction SilentlyContinue)) {
+        $buildHost = "$((Get-ComputerInfo).OsVersion)"
+    }
+
     Write-Output @{
         $buildHost = $buildHost;
         "2004"     = "2004";
