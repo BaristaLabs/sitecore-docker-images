@@ -27,7 +27,7 @@ variables:
   build.includeSxa: '$true'
   build.includeExperimentalImages: '$false'
   build.isolationModeBehaviour: 'ForceHyperV' # "ForceHyperV", "EngineDefault", "ForceProcess", "ForceDefault" - useful on hosted build agents
-  build.skipExistingImages: '$true'
+  build.skipExistingImages: '$false'
 
   # Variables associated with the container registry to use - These need to be defined as Azure Pipelines variables (secret)
   #container.registry.fullname: '' # Full Name of the container registry. E.g. myname.azurecr.io, index.docker.io/username, <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<optional_namespace>
