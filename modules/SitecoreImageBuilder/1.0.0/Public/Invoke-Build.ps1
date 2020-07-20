@@ -86,6 +86,7 @@ function Invoke-Build
     $specs | Select-Object -Property Tag, Include, Deprecated, Priority, Base | Format-Table
 
     # Determine OS (windows or linux)
+    docker system info --format '{{json .}}'
     $osType = (docker system info --format '{{json .}}' | ConvertFrom-Json | ForEach-Object { $_.OSType })
 
     Write-Message "Build specifications loaded..." -Level Info
